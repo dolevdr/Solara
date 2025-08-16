@@ -11,6 +11,8 @@ services:
       - "5432:5432"
     volumes:
       - postgres-data:/var/lib/postgresql/data
+    networks:
+      - app-network
 
   nestjs-service:
     build: ./nestjs-service
@@ -27,6 +29,8 @@ services:
     depends_on:
       - postgres
       - python-generator
+    networks:
+      - app-network
 
   python-generator:
     build: ./python-generator
@@ -39,22 +43,48 @@ services:
       - GEMINI_API_KEY=${GEMINI_API_KEY}
     depends_on:
       - postgres
+    networks:
+      - app-network
 
-  # Optional: Serve Angular app via Docker (for production-like setup)
+  # Angular Frontend UI
   angular-frontend:
     build: 
       context: ./angular-frontend
       dockerfile: Dockerfile.dev
-    command: ng serve --host 0.0.0.0 --port 4200
+    command: ng serve --host 0.0.0.0 --port 4200 --configuration=development
     volumes:
       - ./angular-frontend:/app
       - /app/node_modules  # Anonymous volume for node_modules
     ports:
       - "4200:4200"
     environment:
+      - NODE_ENV=development
       - API_URL=http://localhost:3000
     depends_on:
       - nestjs-service
+    networks:
+      - app-network
+
+  # Production build of Angular app (optional)
+  angular-frontend-prod:
+    build: 
+      context: ./angular-frontend
+      dockerfile: Dockerfile.prod
+    ports:
+      - "8080:80"
+    environment:
+      - NODE_ENV=production
+      - API_URL=http://localhost:3000
+    depends_on:
+      - nestjs-service
+    networks:
+      - app-network
+    profiles:
+      - production
 
 volumes:
   postgres-data:
+
+networks:
+  app-network:
+    driver: bridge

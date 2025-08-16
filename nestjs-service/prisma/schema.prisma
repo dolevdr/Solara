@@ -24,7 +24,7 @@ enum CampaignStatus {
 
 model Campaign {
   id        String          @id @default(uuid())
-  title     String?
+  name      String          @default("New Campaign") @db.Citext
   prompt    String
   type      CampaignType
   status    CampaignStatus  @default(pending)
@@ -40,8 +40,7 @@ model Campaign {
 model Result {
   id          String   @id @default(uuid())
   campaignId  String   @unique
-  contentUrl  String?  // For images
-  contentText String?  // For text
+  content  String?  // For images and text
   createdAt   DateTime @default(now())
   
   // Relations

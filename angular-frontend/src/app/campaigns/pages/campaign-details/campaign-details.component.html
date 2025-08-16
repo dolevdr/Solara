@@ -1,0 +1,189 @@
+<div class="campaign-details-container">
+    <!-- Back Button -->
+    <div class="back-button-container">
+        <button mat-button color="primary" (click)="onBackToCampaigns()" class="back-btn">
+            <mat-icon>arrow_back</mat-icon>
+            Back to Campaigns
+        </button>
+    </div>
+
+    <!-- Campaign Details -->
+    <div class="campaign-content" *ngIf="campaign$ | async as campaign; else loading">
+        <!-- Header Card -->
+        <mat-card class="header-card">
+            <mat-card-header>
+                <mat-card-title class="campaign-title">
+                    <mat-icon class="title-icon">campaign</mat-icon>
+                    {{ campaign.name }}
+                </mat-card-title>
+                <mat-card-subtitle>
+                    Created on {{ campaign.createdAt | date:'fullDate' }} at {{ campaign.createdAt | date:'shortTime' }}
+                </mat-card-subtitle>
+            </mat-card-header>
+
+            <mat-card-content class="header-content">
+                <div class="status-section">
+                    <mat-chip highlighted [color]="STATUS_TO_COLOR[campaign.status]" class="status-chip">
+                        <mat-icon>{{ STATUS_TO_ICON[campaign.status] }}</mat-icon>
+                        {{ campaign.status }}
+                    </mat-chip>
+
+                    <!-- Processing Spinner -->
+                    <mat-spinner *ngIf="campaign.status === StatusEnum.PROCESSING" diameter="20"
+                        class="processing-spinner"></mat-spinner>
+                </div>
+            </mat-card-content>
+        </mat-card>
+
+        <!-- Campaign Information Card -->
+        <mat-card class="info-card">
+            <mat-card-header>
+                <mat-card-title>Campaign Information</mat-card-title>
+            </mat-card-header>
+
+            <mat-card-content>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <span class="info-label">Campaign ID:</span>
+                        <span class="info-value">{{ campaign.id }}</span>
+                    </div>
+
+                    <div class="info-item">
+                        <span class="info-label">Type:</span>
+                        <span class="info-value">
+                            <mat-chip highlighted [color]="campaign.type === 'image' ? 'accent' : 'primary'"
+                                class="type-chip">
+                                <mat-icon>{{ campaign.type === 'image' ? 'image' : 'text_fields' }}</mat-icon>
+                                {{ campaign.type | titlecase }}
+                            </mat-chip>
+                        </span>
+                    </div>
+
+                    <div class="info-item">
+                        <span class="info-label">Created:</span>
+                        <span class="info-value">{{ campaign.createdAt | date:'medium' }}</span>
+                    </div>
+
+                    <div class="info-item">
+                        <span class="info-label">Last Updated:</span>
+                        <span class="info-value">{{ campaign.updatedAt | date:'medium' }}</span>
+                    </div>
+                </div>
+            </mat-card-content>
+        </mat-card>
+
+        <!-- Prompt Card -->
+        <mat-card class="prompt-card">
+            <mat-card-header>
+                <mat-card-title>Prompt</mat-card-title>
+            </mat-card-header>
+
+            <mat-card-content>
+                <div class="prompt-content">
+                    <p class="prompt-text">{{ campaign.prompt }}</p>
+                </div>
+            </mat-card-content>
+        </mat-card>
+
+        <!-- Result Card -->
+        <mat-card class="result-card"
+            *ngIf="campaign.result || campaign.status === StatusEnum.COMPLETED || campaign.status === StatusEnum.FAILED">
+            <mat-card-header>
+                <mat-card-title>Result</mat-card-title>
+            </mat-card-header>
+
+            <mat-card-content>
+                <!-- Loading State -->
+                <div *ngIf="campaign.status === StatusEnum.PROCESSING" class="processing-state">
+                    <mat-spinner diameter="40"></mat-spinner>
+                    <p>Generating {{ campaign.type }} content...</p>
+                </div>
+
+                <!-- Failed State -->
+                <div *ngIf="campaign.status === StatusEnum.FAILED" class="failed-state">
+                    <mat-icon color="warn" class="error-icon">error</mat-icon>
+                    <p>Failed to generate content. Please try again.</p>
+                </div>
+
+                <!-- Completed State with Content -->
+                <div *ngIf="campaign.status === StatusEnum.COMPLETED && campaign.result" class="result-content">
+                    <!-- Image Result -->
+                    <div *ngIf="campaign.type === 'image'" class="image-result">
+                        <h4>Generated Image:</h4>
+                        <div class="image-container">
+                            <img [src]="campaign.result.content" [alt]="campaign.name" class="result-image">
+                            <app-image-preview [src]="campaign.result.content" [alt]="campaign.name"
+                                [showPreview]="true">
+                            </app-image-preview>
+                        </div>
+                        <div class="image-actions">
+                            <button mat-button color="primary"
+                                (click)="downloadImage(campaign.result.content, campaign.name)">
+                                <mat-icon>download</mat-icon>
+                                Download Image
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Text Result -->
+                    <div *ngIf="campaign.type === 'text'" class="text-result">
+                        <h4>Generated Text:</h4>
+                        <div class="text-content">
+                            <p class="generated-text">{{ campaign.result.content }}</p>
+                        </div>
+                        <div class="text-actions">
+                            <button mat-button color="primary" (click)="copyToClipboard(campaign.result.content)">
+                                <mat-icon>content_copy</mat-icon>
+                                Copy to Clipboard
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pending State -->
+                <div *ngIf="campaign.status === StatusEnum.PENDING" class="pending-state">
+                    <mat-icon color="accent" class="pending-icon">schedule</mat-icon>
+                    <p>Campaign is queued for processing...</p>
+                </div>
+            </mat-card-content>
+        </mat-card>
+
+        <!-- Additional Details Expansion Panel -->
+        <mat-expansion-panel class="details-panel">
+            <mat-expansion-panel-header>
+                <mat-panel-title>
+                    <mat-icon>info</mat-icon>
+                    Additional Details
+                </mat-panel-title>
+            </mat-expansion-panel-header>
+
+            <div class="additional-details">
+                <div class="detail-item">
+                    <strong>Campaign ID:</strong> {{ campaign.id }}
+                </div>
+                <div class="detail-item">
+                    <strong>Created:</strong> {{ campaign.createdAt | date:'fullDate' }} at {{ campaign.createdAt |
+                    date:'mediumTime' }}
+                </div>
+                <div class="detail-item">
+                    <strong>Last Updated:</strong> {{ campaign.updatedAt | date:'fullDate' }} at {{ campaign.updatedAt |
+                    date:'mediumTime' }}
+                </div>
+                <div class="detail-item">
+                    <strong>Status:</strong> {{ campaign.status }}
+                </div>
+                <div class="detail-item">
+                    <strong>Type:</strong> {{ campaign.type | titlecase }}
+                </div>
+            </div>
+        </mat-expansion-panel>
+    </div>
+
+    <!-- Loading State -->
+    <ng-template #loading>
+        <div class="loading-state">
+            <mat-spinner diameter="50"></mat-spinner>
+            <p>Loading campaign details...</p>
+        </div>
+    </ng-template>
+</div>

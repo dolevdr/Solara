@@ -1,0 +1,6 @@
+<div class="image-preview-tooltip" *ngIf="showPreview && src && isHovered">
+    <div class="preview-tooltip" [style.left.px]="tooltipPosition.x" [style.top.px]="tooltipPosition.y"
+        [class.show]="isHovered">
+        <img [src]="src" [alt]="alt" class="preview-tooltip-image">
+    </div>
+</div>

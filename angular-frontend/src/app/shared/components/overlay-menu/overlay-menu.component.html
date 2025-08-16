@@ -1,0 +1,19 @@
+<div class="menu-overlay" [class.open]="isOpen" (click)="onCloseMenu()">
+    <div class="menu-content" (click)="onMenuClick($event)">
+        <div class="menu-header">
+            <h3>Menu</h3>
+            <button mat-icon-button (click)="onCloseMenu()" aria-label="Close">
+                <mat-icon>close</mat-icon>
+            </button>
+        </div>
+        <div class="menu-items">
+            @for (item of navigationItems; track item.routerLink) {
+            <button mat-button [routerLink]="item.routerLink" routerLinkActive="active"
+                [routerLinkActiveOptions]="{exact: true}" (click)="onCloseMenu()">
+                <mat-icon>{{ item.icon }}</mat-icon>
+                {{ item.text }}
+            </button>
+            }
+        </div>
+    </div>
+</div>

@@ -4,7 +4,7 @@ import { AIProxyService } from '../ai/ai-proxy.service';
 import { PrismaService } from '../prisma/prisma.service';
 import { ResultsService } from '../results/results.service';
 import { CreateCampaignDto } from './dto/create-campaign.dto';
-import { QueryCampaignsDto } from './dto/query-campaigns.dto';
+import { QueryCampaignsDto, SortBy, SortOrder } from './dto/query-campaigns.dto';
 import { UpdateCampaignDto } from './dto/update-campaign.dto';
 import { WebhookDto } from './dto/webhook.dto';
 
@@ -17,16 +17,16 @@ export class CampaignService {
   ) { }
 
   async create(createCampaignDto: CreateCampaignDto): Promise<Campaign> {
+    const result = await this.handleAiResponse(createCampaignDto);
     const campaign = await this.prisma.campaign.create({
       data: {
-        title: createCampaignDto.title,
+        name: createCampaignDto.name,
         prompt: createCampaignDto.prompt,
         type: createCampaignDto.type,
-        status: CampaignStatus.pending,
+        status: CampaignStatus.completed,
         result: {
           create: {
-            contentUrl: null,
-            contentText: null,
+            content: result?.content ?? null
           }
         }
       },
@@ -39,7 +39,7 @@ export class CampaignService {
   }
 
   async findAll(query: QueryCampaignsDto) {
-    const { page = 1, limit = 10 } = query;
+    const { page = 1, limit = 10, sortBy = SortBy.CREATED_AT, direction = SortOrder.DESC } = query;
     const skip = (page - 1) * limit;
 
     return this.prisma.$transaction([
@@ -48,7 +48,7 @@ export class CampaignService {
           result: true,
         },
         orderBy: {
-          createdAt: 'desc',
+          [sortBy]: direction,
         },
         skip,
         take: limit,
@@ -139,7 +139,7 @@ export class CampaignService {
         }),
         this.prisma.result.update({
           where: { campaignId: track_id },
-          data: { contentUrl: output[0] ?? null },
+          data: { content: output[0] ?? null },
         }),
       ]);
 
@@ -167,7 +167,7 @@ export class CampaignService {
 
     // For retry, we'll use basic parameters since we don't have the original DTO
     const basicDto = {
-      title: campaign.title,
+      name: campaign.name,
       prompt: campaign.prompt,
       type: campaign.type,
     } as CreateCampaignDto;
@@ -224,6 +224,18 @@ export class CampaignService {
     } catch (error) {
       console.error(`Error processing campaign ${campaign.id}:`, error);
       await this.updateStatus(campaign.id, CampaignStatus.failed);
+    }
+  }
+
+  private async handleAiResponse(createCampaignDto: CreateCampaignDto) {
+    try {
+      const generate = createCampaignDto.type === CampaignType.text ? this.aiProxyService.generateText({ prompt: createCampaignDto.prompt }) : this.aiProxyService.generateImage({ prompt: createCampaignDto.prompt });
+      const result: any = await generate;
+      return {
+        content: result.text ?? result.imageUrl ?? null,
+      }
+    } catch (error) {
+      console.error(`Error generating ${createCampaignDto.type} for campaign ${createCampaignDto}:`, error);
     }
   }
 }

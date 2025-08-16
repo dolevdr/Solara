@@ -1,0 +1,70 @@
+<div class="campaign-create-container">
+    <div class="back-button-container">
+        <button mat-button (click)="backToCampaigns()" class="back-btn">
+            <mat-icon>arrow_back</mat-icon>
+            Back to Campaigns
+        </button>
+    </div>
+
+    <div class="form-header">
+        <h2>Create New Campaign</h2>
+        <p>Fill in the details below to create a new campaign</p>
+    </div>
+
+    <form [formGroup]="campaignForm" (ngSubmit)="onSubmit()" class="campaign-form">
+        <!-- Name Field -->
+        <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Campaign Name</mat-label>
+            <input matInput formControlName="name" placeholder="Enter campaign name" required>
+            <mat-error *ngIf="nameControl?.hasError('required')">
+                Campaign name is required
+            </mat-error>
+        </mat-form-field>
+
+        <!-- Type Field -->
+        <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Campaign Type</mat-label>
+            <mat-select formControlName="type" placeholder="Select campaign type" required>
+                <mat-option *ngFor="let type of campaignTypes" [value]="type.value">
+                    {{ type.label }}
+                </mat-option>
+            </mat-select>
+            <mat-error *ngIf="typeControl?.hasError('required')">
+                Campaign type is required
+            </mat-error>
+        </mat-form-field>
+
+        <!-- Prompt Field -->
+        <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Prompt</mat-label>
+            <textarea matInput formControlName="prompt" placeholder="Enter your prompt" required rows="3"
+                [maxlength]="maxPromptLength">
+            </textarea>
+            <mat-hint align="end">{{ promptControl?.value?.length ?? 0 }}/{{ maxPromptLength }}</mat-hint>
+            <mat-error *ngIf="promptControl?.hasError('required')">
+                Prompt is required
+            </mat-error>
+            <mat-error *ngIf="promptControl?.hasError('maxlength')">
+                Prompt cannot exceed {{ maxPromptLength }} characters
+            </mat-error>
+        </mat-form-field>
+
+        <!-- Form Actions -->
+        <div class="form-actions">
+            @let loading = loading$ | async;
+            <button type="button" mat-button (click)="backToCampaigns()" class="cancel-btn" [disabled]="loading">
+                Cancel
+            </button>
+            <div class="submit-container">
+                <button type="submit" mat-raised-button color="primary" [disabled]="!campaignForm.valid || loading"
+                    class="submit-btn">
+                    <mat-icon>add</mat-icon>
+                    Create Campaign
+                </button>
+                @if (loading) {
+                <mat-spinner color="primary" diameter="20" class="spinner"></mat-spinner>
+                }
+            </div>
+        </div>
+    </form>
+</div>

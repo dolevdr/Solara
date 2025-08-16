@@ -1,12 +1,13 @@
+import warnings
+warnings.filterwarnings("ignore", message="Field name.*shadows an attribute in parent.*")
+
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
 import os
 import requests
-from typing import Optional
 from dotenv import load_dotenv
 from google import genai
-from google.genai import types
 from schemas.models import GenerateTextRequest, GenerateTextResponse, GenerateImageRequest, GenerateImageResponse
 from schemas.status import Status
 from schemas.exceptions import ExceptionType
@@ -44,13 +45,14 @@ async def generate_text(request: GenerateTextRequest):
     Generate text using Google Gemini API
     """
     try:
-        genai.configure(api_key=GEMINI_API_KEY)
-        client = genai.Client() if GEMINI_API_KEY else None
+        client = genai.Client(api_key=GEMINI_API_KEY) if GEMINI_API_KEY else None
 
+        prompt = f"{request.prompt}. Answer should be in 50 words max"
         response = client.models.generate_content(
-            model="gemini-2.5-pro",
-            contents=request.prompt
+            model="gemini-2.5-flash",
+            contents=prompt
         )
+
         
         return GenerateTextResponse(
             success=True,

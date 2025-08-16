@@ -1,11 +1,10 @@
-import { IsString, IsEnum, IsOptional, MinLength, MaxLength, IsNumber, IsBoolean, Min, Max } from 'class-validator';
 import { CampaignType } from '@prisma/client';
+import { IsBoolean, IsEnum, IsNumber, IsOptional, IsString, Max, MaxLength, Min, MinLength } from 'class-validator';
 
 export class CreateCampaignDto {
-  @IsOptional()
   @IsString()
   @MaxLength(255)
-  title?: string;
+  name: string;
 
   @IsString()
   @MinLength(1)

@@ -1,5 +1,16 @@
 import { Type } from 'class-transformer';
-import { IsInt, IsOptional, Max, Min } from 'class-validator';
+import { IsEnum, IsInt, IsOptional, Max, Min } from 'class-validator';
+
+export enum SortOrder {
+  ASC = 'asc',
+  DESC = 'desc',
+}
+
+export enum SortBy {
+  CREATED_AT = 'createdAt',
+  UPDATED_AT = 'updatedAt',
+  NAME = 'name',
+}
 
 export class QueryCampaignsDto {
   @IsOptional()
@@ -14,4 +25,12 @@ export class QueryCampaignsDto {
   @Min(1)
   @Max(100)
   limit?: number = 10;
+
+  @IsOptional()
+  @IsEnum(SortBy)
+  sortBy?: SortBy = SortBy.CREATED_AT;
+
+  @IsOptional()
+  @IsEnum(SortOrder)
+  direction?: SortOrder = SortOrder.DESC;
 }

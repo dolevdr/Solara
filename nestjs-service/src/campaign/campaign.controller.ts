@@ -21,8 +21,6 @@ import {
 } from '@nestjs/swagger';
 import { Campaign, CampaignStatus } from '@prisma/client';
 import { Response } from 'express';
-import * as fs from 'fs';
-import * as path from 'path';
 import { AIProxyService } from '../ai/ai-proxy.service';
 import { ResultsService } from '../results/results.service';
 import { CampaignService } from './campaign.service';
@@ -98,21 +96,7 @@ export class CampaignController {
   @ApiResponse({ status: 200, description: 'Image served successfully' })
   @ApiResponse({ status: 404, description: 'Image not found' })
   async serveImage(@Param('id') id: string, @Res() res: Response) {
-    const campaign = await this.campaignService.findOne(id);
-
-    // Use the resultsService to get the result for this campaign
-    const result = await this.resultsService.findByCampaignId(id);
-
-    if (!result?.contentUrl) {
-      throw new Error('No image found for this campaign');
-    }
-
-    const imagePath = path.join(process.cwd(), '..', 'output', result.contentUrl);
-
-    if (!fs.existsSync(imagePath)) {
-      throw new Error('Image file not found');
-    }
-
+    const imagePath = await this.resultsService.getImagePath(id);
     res.sendFile(imagePath);
   }
 
