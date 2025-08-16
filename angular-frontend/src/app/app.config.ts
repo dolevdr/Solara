@@ -10,6 +10,8 @@ import { routes } from './app.routes';
 import { CampaignsEffects } from './campaigns/state/campaigns.effects';
 import { campaignsReducer } from './campaigns/state/campaigns.reducers';
 import { CAMPAIGNS_FEATURE_KEY, CampaignsState } from './campaigns/state/campaigns.state';
+import { themeReducer } from './shared/state/theme.reducer';
+import { THEME_FEATURE_KEY, ThemeState } from './shared/state/theme.state';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -18,7 +20,8 @@ export const appConfig: ApplicationConfig = {
     provideAnimationsAsync(),
     provideHttpClient(),
     provideStore({
-      [CAMPAIGNS_FEATURE_KEY]: campaignsReducer as ActionReducer<CampaignsState, Action>
+      [CAMPAIGNS_FEATURE_KEY]: campaignsReducer as ActionReducer<CampaignsState, Action>,
+      [THEME_FEATURE_KEY]: themeReducer as ActionReducer<ThemeState, Action>
     }),
     provideEffects([CampaignsEffects]),
     provideStoreDevtools({

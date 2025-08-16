@@ -8,4 +8,267 @@ body {
 body {
     margin: 0;
     font-family: Roboto, "Helvetica Neue", sans-serif;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Light Theme (Default) */
+:root[data-theme="light"] {
+    --background-color: #ffffff;
+    --surface-color: #fafafa;
+    --text-primary: rgba(0, 0, 0, 0.87);
+    --text-secondary: rgba(0, 0, 0, 0.6);
+    --text-disabled: rgba(0, 0, 0, 0.38);
+    --divider-color: rgba(0, 0, 0, 0.12);
+    --card-background: #ffffff;
+    --table-header: #f5f5f5;
+    --table-row-hover: #fafafa;
+    --shadow-color: rgba(0, 0, 0, 0.12);
+    --border-color: #e0e0e0;
+    --success-color: #4caf50;
+    --warning-color: #ff9800;
+    --error-color: #f44336;
+    --info-color: #2196f3;
+    --primary-color: #1976d2;
+    --primary-contrast-color: #ffffff;
+    --accent-color: #ff4081;
+    --accent-contrast-color: #ffffff;
+    --warn-color: #f44336;
+    --warn-contrast-color: #ffffff;
+    --overlay-background: rgba(0, 0, 0, 0.5);
+    --button-hover: #f5f5f5;
+    --dropdown-background: #ffffff;
+    --dropdown-hover: #f5f5f5;
+    --status-pending-bg: #fff3e0;
+    --status-pending-color: #e65100;
+    --status-processing-bg: #e3f2fd;
+    --status-processing-color: #1565c0;
+    --status-completed-bg: #e8f5e8;
+    --status-completed-color: #2e7d32;
+    --status-failed-bg: #ffebee;
+    --status-failed-color: #c62828;
+    --status-chip-bg: rgba(255, 255, 255, 0.8);
+    --status-chip-color: #333;
+    --status-chip-border: rgba(255, 255, 255, 0.3);
+}
+
+/* Dark Theme */
+:root[data-theme="dark"] {
+    --background-color: #121212;
+    --surface-color: #1e1e1e;
+    --text-primary: rgba(255, 255, 255, 0.87);
+    --text-secondary: rgba(255, 255, 255, 0.6);
+    --text-disabled: rgba(255, 255, 255, 0.38);
+    --divider-color: rgba(255, 255, 255, 0.12);
+    --card-background: #1e1e1e;
+    --table-header: #2d2d2d;
+    --table-row-hover: #2a2a2a;
+    --shadow-color: rgba(0, 0, 0, 0.3);
+    --border-color: #404040;
+    --success-color: #66bb6a;
+    --warning-color: #ffb74d;
+    --error-color: #ef5350;
+    --info-color: #42a5f5;
+    --primary-color: #90caf9;
+    --primary-contrast-color: #000000;
+    --accent-color: #f48fb1;
+    --accent-contrast-color: #000000;
+    --warn-color: #ef5350;
+    --warn-contrast-color: #000000;
+    --overlay-background: rgba(0, 0, 0, 0.7);
+    --button-hover: #2a2a2a;
+    --dropdown-background: #2d2d2d;
+    --dropdown-hover: #3a3a3a;
+    --status-pending-bg: #3e2723;
+    --status-pending-color: #ffb74d;
+    --status-processing-bg: #1a237e;
+    --status-processing-color: #90caf9;
+    --status-completed-bg: #1b5e20;
+    --status-completed-color: #81c784;
+    --status-failed-bg: #3e2723;
+    --status-failed-color: #ef5350;
+}
+
+/* Apply theme variables */
+body {
+    background-color: var(--background-color);
+    color: var(--text-primary);
+}
+
+/* Theme transition animations */
+* {
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+/* Material Components Theme Overrides */
+
+/* Cards */
+.mat-mdc-card {
+    background-color: var(--card-background) !important;
+    border: 1px solid var(--border-color) !important;
+    color: var(--text-primary) !important;
+}
+
+.mat-mdc-card-content {
+    color: var(--text-primary) !important;
+}
+
+/* Tables */
+.mat-mdc-table {
+    background-color: var(--card-background) !important;
+    color: var(--text-primary) !important;
+}
+
+.mat-mdc-header-row {
+    background-color: var(--table-header) !important;
+}
+
+.mat-mdc-row:hover {
+    background-color: var(--table-row-hover) !important;
+}
+
+.mat-mdc-cell {
+    color: var(--text-primary) !important;
+    border-bottom-color: var(--border-color) !important;
+}
+
+.mat-mdc-header-cell {
+    color: var(--text-primary) !important;
+    border-bottom-color: var(--border-color) !important;
+}
+
+/* Buttons */
+.mat-mdc-button {
+    color: var(--text-primary) !important;
+}
+
+.mat-mdc-raised-button {
+    background-color: var(--primary-color) !important;
+    color: var(--primary-contrast-color) !important;
+}
+
+.mat-mdc-raised-button:hover {
+    background-color: var(--button-hover) !important;
+}
+
+.mat-mdc-raised-button:disabled {
+    background-color: var(--text-disabled) !important;
+    color: var(--text-secondary) !important;
+}
+
+/* Dropdowns/Menus */
+.mat-mdc-menu-panel {
+    background-color: var(--dropdown-background) !important;
+    border: 1px solid var(--border-color) !important;
+}
+
+.mat-mdc-menu-item {
+    color: var(--text-primary) !important;
+    background-color: var(--dropdown-background) !important;
+}
+
+.mat-mdc-menu-item:hover {
+    background-color: var(--dropdown-hover) !important;
+}
+
+/* Toolbar */
+.mat-mdc-toolbar {
+    background-color: var(--card-background) !important;
+    color: var(--text-primary) !important;
+    border-bottom: 1px solid var(--border-color) !important;
+}
+
+/* Form Fields */
+.mat-mdc-form-field {
+    color: var(--text-primary) !important;
+}
+
+.mat-mdc-input-element {
+    color: var(--text-primary) !important;
+}
+
+.mat-mdc-form-field-label {
+    color: var(--text-secondary) !important;
+}
+
+/* Material Select Value */
+.mat-mdc-select-value {
+    color: var(--text-primary);
+}
+
+/* Chips with Status Colors */
+.mat-mdc-chip {
+    background-color: var(--surface-color);
+    color: var(--text-primary) !important;
+    border: 1px solid var(--border-color) !important;
+}
+
+/* Status-specific chip colors */
+.mat-mdc-chip.mat-mdc-chip-color-primary {
+    background-color: var(--status-completed-bg) !important;
+    color: var(--status-completed-color) !important;
+}
+
+.mat-mdc-chip.mat-mdc-chip-color-accent {
+    background-color: var(--status-processing-bg) !important;
+    color: var(--status-processing-color) !important;
+}
+
+.mat-mdc-chip.mat-mdc-chip-color-warn {
+    background-color: var(--status-failed-bg) !important;
+    color: var(--status-failed-color) !important;
+}
+
+/* Paginator */
+::ng-deep .mat-mdc-paginator {
+    background-color: var(--card-background);
+    color: var(--text-primary);
+    border-top: 1px solid var(--border-color);
+}
+
+/* Custom component styles */
+.theme-aware {
+    background-color: var(--background-color);
+    color: var(--text-primary);
+}
+
+.theme-card {
+    background-color: var(--card-background);
+    border: 1px solid var(--border-color);
+    box-shadow: 0 2px 4px var(--shadow-color);
+}
+
+/* Overlay Menu */
+.overlay-menu {
+    background-color: var(--card-background) !important;
+    color: var(--text-primary) !important;
+    border-left: 1px solid var(--border-color) !important;
+}
+
+.overlay-menu .mat-mdc-list-item {
+    color: var(--text-primary) !important;
+}
+
+.overlay-menu .mat-mdc-list-item:hover {
+    background-color: var(--table-row-hover) !important;
+}
+
+/* Campaign Details Specific */
+.campaign-details-card {
+    background-color: var(--card-background) !important;
+    color: var(--text-primary) !important;
+    border: 1px solid var(--border-color) !important;
+}
+
+.campaign-details-content {
+    color: var(--text-primary) !important;
+}
+
+/* Create Button */
+.create-campaign-button {
+    background-color: var(--primary-color) !important;
+    color: var(--primary-contrast-color) !important;
+}
+
+.create-campaign-button:hover {
+    background-color: var(--button-hover) !important;
 }

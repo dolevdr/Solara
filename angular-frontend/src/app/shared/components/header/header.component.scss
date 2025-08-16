@@ -4,6 +4,9 @@
     width: 100%;
     min-width: 100%;
     box-sizing: border-box;
+    background-color: var(--card-background) !important;
+    color: var(--text-primary) !important;
+    border-bottom: 1px solid var(--border-color) !important;
 }
 
 .toolbar-content {
@@ -21,12 +24,19 @@
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
+    color: var(--text-primary);
+}
+
+.toolbar-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-left: auto;
 }
 
 .menu-btn {
-    color: #333;
+    color: var(--text-primary) !important;
     z-index: 10;
-    margin-left: auto;
 }
 
 // Responsive breakpoints

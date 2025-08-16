@@ -1,0 +1,41 @@
+:host {
+    display: inline-block;
+}
+
+button[mat-icon-button] {
+    transition: transform 0.2s ease;
+
+    &:hover {
+        transform: scale(1.1);
+    }
+
+    mat-icon {
+        transition: color 0.3s ease;
+    }
+}
+
+.active-theme {
+    background-color: var(--primary-color) !important;
+    color: var(--primary-contrast-color) !important;
+
+    mat-icon {
+        color: var(--primary-contrast-color) !important;
+    }
+}
+
+.mat-menu-item {
+    transition: background-color 0.2s ease, color 0.2s ease;
+
+    &:hover:not(.active-theme) {
+        background-color: var(--table-row-hover);
+    }
+
+    mat-icon {
+        margin-right: 8px;
+        transition: color 0.2s ease;
+    }
+
+    span {
+        font-weight: 500;
+    }
+}

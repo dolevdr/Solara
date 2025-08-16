@@ -1,8 +1,11 @@
 <mat-toolbar color="primary" class="toolbar">
     <div class="toolbar-content">
         <span class="app-title">AI Content Generator</span>
-        <button mat-icon-button class="menu-btn" (click)="onMenuToggle()" aria-label="Menu">
-            <mat-icon>menu</mat-icon>
-        </button>
+        <div class="toolbar-actions">
+            <app-theme-toggle></app-theme-toggle>
+            <button mat-icon-button class="menu-btn" (click)="onMenuToggle()" aria-label="Menu">
+                <mat-icon>menu</mat-icon>
+            </button>
+        </div>
     </div>
 </mat-toolbar>

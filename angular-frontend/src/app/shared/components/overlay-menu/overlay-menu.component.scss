@@ -5,7 +5,7 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: var(--overlay-background);
     z-index: 1000;
     opacity: 0;
     visibility: hidden;
@@ -23,11 +23,12 @@
     right: -300px;
     width: 300px;
     height: 100%;
-    background: white;
-    box-shadow: -2px 0 8px rgba(0, 0, 0, 0.15);
+    background: var(--card-background);
+    box-shadow: -2px 0 8px var(--shadow-color);
     transition: right 0.3s ease;
     display: flex;
     flex-direction: column;
+    color: var(--text-primary);
 
     .menu-overlay.open & {
         right: 0;
@@ -39,14 +40,14 @@
     justify-content: space-between;
     align-items: center;
     padding: 16px;
-    border-bottom: 1px solid #e0e0e0;
-    background: #f5f5f5;
+    border-bottom: 1px solid var(--border-color);
+    background: var(--surface-color);
 
     h3 {
         margin: 0;
         font-size: 1.1rem;
         font-weight: 500;
-        color: #333;
+        color: var(--text-primary);
     }
 }
 
@@ -62,23 +63,23 @@
         display: flex;
         align-items: center;
         gap: 16px;
-        color: #333;
+        color: var(--text-primary);
         transition: background-color 0.2s ease;
         background: transparent;
         font-size: 16px;
         font-weight: 500;
 
         &:hover {
-            background-color: #f5f5f5;
+            background-color: var(--table-row-hover);
         }
 
         &.active {
-            background-color: #e3f2fd;
-            color: #1976d2;
+            background-color: var(--primary-color);
+            color: var(--primary-contrast-color);
         }
 
         mat-icon {
-            color: #666;
+            color: var(--text-secondary);
             font-size: 24px;
             width: 24px;
             height: 24px;

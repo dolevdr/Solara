@@ -1,0 +1,16 @@
+@if (currentTheme$ | async; as currentTheme) {
+<button mat-icon-button [matMenuTriggerFor]="themeMenu" [matTooltip]="'Toggle theme'" aria-label="Toggle theme">
+    <mat-icon>{{ currentTheme === ThemeEnum.DARK ? 'dark_mode' : 'light_mode' }}</mat-icon>
+</button>
+
+<mat-menu #themeMenu="matMenu">
+    <button mat-menu-item (click)="setTheme(ThemeEnum.LIGHT)" [class.active-theme]="currentTheme === ThemeEnum.LIGHT">
+        <mat-icon>light_mode</mat-icon>
+        <span>Light</span>
+    </button>
+    <button mat-menu-item (click)="setTheme(ThemeEnum.DARK)" [class.active-theme]="currentTheme === ThemeEnum.DARK">
+        <mat-icon>dark_mode</mat-icon>
+        <span>Dark</span>
+    </button>
+</mat-menu>
+}

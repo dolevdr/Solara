@@ -1,6 +1,6 @@
 <app-header (menuToggle)="toggleMenu()"></app-header>
 <app-overlay-menu [isOpen]="isMenuOpen" (closeMenu)="closeMenu()"></app-overlay-menu>
 
-<main>
+<main class="theme-aware">
   <router-outlet></router-outlet>
 </main>
